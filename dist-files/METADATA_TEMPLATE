@@ -1,0 +1,50 @@
+Metadata-Version: 2.1
+Name: arbor
+Version: ARBOR_VERSION
+Summary: High performance simulation of networks of multicompartment neurons.
+Author-email: Arbor Dev Team <contact@arbor-sim.org>
+Maintainer-email: Arbor Dev Team <contact@arbor-sim.org>
+License: Copyright 2016-2020 Eidgenössische Technische Hochschule Zürich and Forschungszentrum Jülich GmbH.
+
+        Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+        1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+        2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+        3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+        THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Project-URL: homepage, https://arbor-sim.org
+Project-URL: documentation, https://docs.arbor-sim.org
+Project-URL: repository, https://github.com/arbor-sim/arbor
+Project-URL: changelog, https://github.com/arbor-sim/arbor/releases
+Keywords: simulator,neuroscience,morphological detail,HPC,GPU,C++
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: C++
+Requires-Python: >=3.7
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+Requires-Dist: numpy
+
+Arbor
+=====
+
+The Arbor Python package is a wrapper around the high-performance C++
+library Arbor, for constructing and running simulations
+multi-compartment neuron models, from single cell models to large
+networks.
+
+Documentation is available online at `Read the
+Docs <https://docs.arbor-sim.org/en/latest/python>`__.
+
+`Submit a ticket <https://github.com/arbor-sim/arbor>`__ if you have any
+questions or want help.
