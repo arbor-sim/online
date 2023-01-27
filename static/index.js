@@ -186,7 +186,9 @@ async function main() {
     }
     window.onclick = function(event) {
         if (event.target == current_modal) {
-            current_modal.style.display = 'none';
+            if (current_modal != null) {
+                current_modal.style.display = 'none';
+            }
         }
     }
     welcome_btn.onclick = () => {
@@ -246,7 +248,9 @@ async function main() {
             let idx = target.getAttribute('data-model-idx')
             let model = MODELS[idx]
             await load_model(model)
-            current_modal.style.display = 'none';
+            if (current_modal != null) {
+                current_modal.style.display = 'none';
+            }
         }
     })
 
