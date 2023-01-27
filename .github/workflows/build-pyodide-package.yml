@@ -121,7 +121,9 @@ jobs:
             -I "${ABS_XBUILDENV_INCLUDE}" \
             -I "${ABS_EM_ARBOR}/include" \
             -std=c++20 \
-            "${ABS_EM_ARBOR}/lib/libarbor*" \
+            "${ABS_EM_ARBOR}/lib/libarbor.a" \
+            "${ABS_EM_ARBOR}/lib/libarborio.a" \
+            "${ABS_EM_ARBOR}/lib/libarborenv.a" \
             -o "${ABS_ARBOR_PYLIB_OUTPUT}" \
             -shared -fPIC \
             -s ALLOW_MEMORY_GROWTH=1 \
