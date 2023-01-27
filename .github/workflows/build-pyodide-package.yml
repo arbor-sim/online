@@ -140,13 +140,44 @@ jobs:
             '-DARB_DATA="/dev/null"' \
             -g0 \
             -O2
+    - name: build-dynamic-catalogues
+      # now build the dynamic (.so) catalogues
+      # could also happen separately, but
+      # it's nice that we already have the build environemt
+      # around, and this makes sure the .so and
+      # `import arbor` match in software versions
+      run: |
+        ABS_EM_ARBOR=$(realpath arbor_src/build_arborlib_em/prefix)
+        ABS_MODCC=$(realpath arbor_src/build_modcc_host/bin/modcc)
+        source emsdk-main/emsdk_env.sh
+        # EDIT NEXT LINE WHEN INTRODUCING NEW CATALOGUES!
+        cd catalogue
+        for CAT in io
+        do
+          mkdir -p "${CAT}.build/generated"
+          "${ABS_MODCC}" -N arb -c "${CAT}" -o "${CAT}.build/generated" -t cpu "${CAT}"/*.mod
+          em++ "${CAT}.build/generated"/*.cpp \
+              -I "${ABS_EM_ARBOR}/include" \
+              -std=c++20 \
+              -o "${CAT}-catalogue.so" \
+              -shared -fPIC \
+              -s ALLOW_MEMORY_GROWTH=1 \
+              -s LINKABLE=1 \
+              -s USE_SDL=0 \
+              -s SIDE_MODULE=1 \
+              -s MODULARIZE=1 \
+              -s WASM_BIGINT=1 \
+              -DSTANDALONE=1 \
+              -g0 \
+              -O2
+        done
     - name: build-python-wheel-emscripten
       # The last step wraps up everything into a wheel file
-      # Sorry for the hardcodes __init__.py/WHEEL/METADATA files
       run: |
         cp -v arbor_src/VERSION arbor
         cp -v dist-files/__init__.py arbor/__init__.py
         cp -v dist-files/WHEEL arbor/WHEEL
+        cp -v catalogue/*-catalogue.so arbor/
         sed "s/ARBOR_VERSION/$(cat arbor_src/VERSION)/" \
           dist-files/METADATA_TEMPLATE > arbor.dist-info/METADATA
         WHEEL_FILE="arbor-$(cat arbor_src/VERSION)-py${{ env.PYMAJOR }}-none-any.whl"
