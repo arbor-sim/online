@@ -8,7 +8,7 @@ from time import perf_counter as pc
 import arbor as A
 import arbor_playground
 
-catalogue_path = '/tmp/l5pc-catalogue.so'
+catalogue_path = os.path.join(A.__path__[0], 'l5pc-catalogue.so')
 morphology_path = 'l5pc.nml'
 acc_path = f'l5pc.acc'
 

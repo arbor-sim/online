@@ -1,6 +1,16 @@
 const MODELS = [
 { title: 'Example models:', is_header: true, },
     {
+        title: 'Hay et al. 2011',
+        url: 'models/l5pc.py',
+        description: 'Layer 5 pyramidal cells from Hay et al. 2011, converted from NeuroML using nmlcc in supermechanism modus',
+        enabled: true,
+        filesystem: [
+            { path: 'l5pc.nml', url: 'models/l5pc.nml' },
+            { path: 'l5pc.acc', url: 'models/l5pc.acc' }
+        ],
+    },
+    {
         title: 'Brunel network',
         url: 'models/brunel.py',
         description: 'Advanced network example. Sparsely connected excitatory and inhibitory LIF cells exhibit different synchronization states. Brunel, N. (2000). Dynamics of sparsely connected networks of excitatory and inhibitory spiking neurons. Journal of computational neuroscience, 8(3), 183-208.',
@@ -11,9 +21,6 @@ const MODELS = [
         url: 'models/io_network.py',
         description: 'Inferior Olive neuron model due to Smol et al. Uses a custom catalogue generated from NeuroML source using NMLCC. Network version.',
         enabled: true,
-        filesystem: [
-            { path: 'io-catalogue.so', url: 'catalogue/io-catalogue.so' }
-        ],
     },
 { title: 'Arbor usage examples:', is_header: true, },
     {
@@ -54,9 +61,6 @@ const MODELS = [
         url: 'models/io_single_cell.py',
         description: 'Inferior Olive neuron model due to Smol et al. Uses a custom catalogue generated from NeuroML source using NMLCC.',
         enabled: true,
-        filesystem: [
-            { path: 'io-catalogue.so', url: 'catalogue/io-catalogue.so' }
-        ],
     },
     {
         title: 'Ring network',
