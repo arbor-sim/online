@@ -152,7 +152,7 @@ jobs:
         source emsdk-main/emsdk_env.sh
         # EDIT NEXT LINE WHEN INTRODUCING NEW CATALOGUES!
         cd catalogue
-        for CAT in io
+        for CAT in io l5pc
         do
           mkdir -p "${CAT}.build/generated"
           "${ABS_MODCC}" -N arb -c "${CAT}" -o "${CAT}.build/generated" -t cpu "${CAT}"/*.mod
