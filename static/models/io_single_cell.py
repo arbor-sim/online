@@ -1,3 +1,4 @@
+import os
 import arbor
 import pandas as pd
 import plotly.express as px
@@ -18,7 +19,6 @@ labels = arbor.label_dict({
 })
 decor = (
     arbor.decor()
-    .paint('"soma"', arbor.density("hh"))
     .paint('"soma"', arbor.density('na_s', dict(conductance=0.030)))
     .paint('"soma"', arbor.density('kdr',  dict(conductance=0.030, ek=-75)))
     .paint('"soma"', arbor.density('cal',  dict(conductance=0.045)))
@@ -41,10 +41,10 @@ decor = (
 
 cell = arbor.cable_cell(tree, decor, labels)
 m = arbor.single_cell_model(cell)
-m.properties.catalogue.extend(arbor.load_catalogue('io-catalogue.so'), '')
+catalogue_path = os.path.join(arbor.__path__[0], 'io-catalogue.so')
+m.properties.catalogue.extend(arbor.load_catalogue(catalogue_path), '')
 m.probe('voltage', where='"root"', frequency=1) 
 m.run(2000, 0.1)
-
 
 df = pd.DataFrame({"t/ms": m.traces[0].time, "U/mV": m.traces[0].value})
 fig = px.line(df, x='t/ms', y='U/mV')
