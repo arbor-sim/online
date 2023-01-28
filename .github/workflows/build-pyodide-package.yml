@@ -188,3 +188,34 @@ jobs:
       with:
         name: Arbor Emscripten Wheel
         path: ${{ env.WHEEL_FILE }}
+    - name: build-static
+      run: |
+        # 'install' wheel file
+        echo ${{env.WHEEL_FILE}} > static/ARBOR_WHEEL_NAME
+        cp -v ${{ env.WHEEL_FILE }} static
+        # get latest pyodide distribution
+        PYODIDE_VERSION=$(cat PYODIDE_VERSION)
+        PYODIDE_RELEASE_URL="https://github.com/pyodide/pyodide/releases/download"
+        PYODIDE_BASENAME=pyodide-${PYODIDE_VERSION}.tar.bz2
+        wget -nc "${PYODIDE_RELEASE_URL}/${PYODIDE_VERSION}/${PYODIDE_BASENAME}"
+        tar -xvf ${PYODIDE_BASENAME}
+        mv pyodide static
+    - name: build-static-artifact
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: static
+        retention-days: 10
+
+  deploy-static-ghpages:
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
