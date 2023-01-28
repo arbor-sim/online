@@ -276,6 +276,7 @@ async function main() {
         'micropip',
         'numpy',
         'pandas',
+        'matplotlib',
         (await (await fetch('ARBOR_WHEEL_NAME')).text()).trim()
     ])
     const micropip = pyodide.pyimport('micropip');

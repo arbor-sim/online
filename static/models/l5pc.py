@@ -6,6 +6,8 @@ import subprocess as sp
 from pathlib import Path
 from time import perf_counter as pc
 import arbor as A
+import pandas
+import plotly.express as px
 import arbor_playground
 
 catalogue_path = os.path.join(A.__path__[0], 'l5pc-catalogue.so')
@@ -15,7 +17,8 @@ acc_path = f'l5pc.acc'
 FIGURE = '5a'
 assert FIGURE in {'4b', '4a', '5a'}
 dt = 0.025
-tstop = 3000 if FIGURE == '4b' else 600
+tstop = 3000 if FIGURE == '4b' else 400
+
 
 class recipe(A.recipe):
     def __init__(self):
@@ -61,7 +64,9 @@ class recipe(A.recipe):
         #    nseg = 1 + 2*int(L/40)
         #    nSec = nSec + 1
         #  }
-        dec.discretization(A.cv_policy_max_extent(20))
+        # dec.discretization(A.cv_policy_max_extent(20))
+        # to speed it up in the browser, use less control volumes
+        dec.discretization(A.cv_policy_max_extent(100))
 
         if gid in self.gid_to_inputs:
             for tag, inp in self.gid_to_inputs[gid]:
@@ -109,10 +114,9 @@ meter_manager.checkpoint('load-balance', ctx)
 sim = A.simulation(mdl, ctx, ddc)
 meter_manager.checkpoint('simulation-init', ctx)
 
-hdl = sim.sample((0, 1), A.regular_schedule(.1))
+hdl = sim.sample((0, 0), A.regular_schedule(.1))
 
 print(f'Running simulation for {tstop}ms...')
-
 t0 = pc()
 sim.run(tstop, dt)
 t1 = pc()
@@ -123,60 +127,9 @@ meter_manager.checkpoint('simulation-run', ctx)
 t = data[:,0]
 vs = data[:,1:] # (time, cv)
 
-#cc = mdl.cell_description(0)
+print(f"{A.meter_report(meter_manager, ctx)}")
 
-def point(p):
-    return np.array([p.x, p.y, p.z])
-def toloc(at):
-    segs = mdl.mrf.branch_segments(at.branch)
-    ls = np.array([np.linalg.norm(point(s.dist) - point(s.prox)) for s in segs])
-    ls = ls / ls.sum()
-    ls = ls.cumsum()
-    idx = (((at.prox + at.dist) - ls *2)**2).argmin()
-    return 0.5*point(segs[idx].prox) + 0.5*point(segs[idx].dist)
-locs = np.array([toloc(b) for b in meta])
-
-
-import io
-import matplotlib.pyplot as plt
-plt.figure(figsize=(5, 12))
-Vmin, Vptp = vs.min(), vs.ptp()
-print(vs.max(1).shape)
-cmap = plt.get_cmap('RdYlBu')
-for i in range(mdl.mrf.num_branches):
-    segs = mdl.mrf.branch_segments(i)
-    for seg in segs:
-        a = point(seg.prox)
-        b = point(seg.dist)
-        segp = np.vstack([a, b])
-        x = np.linalg.norm(locs - (0.5 * a + 0.5 * b), axis=1)
-        v = vs[:,x.argmin()]
-        c = (v.max() - Vmin) / Vptp
-        plt.plot(segp[:,0], segp[:,1], color=cmap(c),
-                lw=(seg.dist.radius+seg.prox.radius),
-                solid_capstyle='round', zorder=segp[:,2].mean()/100)
-skip = 2000
-end = -2000
-seen = []
-for i, (loc, v) in enumerate(zip(locs, vs.T)):
-    x, y, z = loc
-    skipthis = False
-    place_x = x + np.sign(x)*100
-    for a, b in seen:
-        if np.sqrt(0.3*(a - place_x)**2 + (b - y)**2) < 100:
-            skipthis = True
-            break
-    if skipthis:
-        continue
-    seen.append((place_x, y))
-    xoff = -t[skip:end].mean()
-    yoff = -v[skip]
-    plt.plot(place_x + (xoff + t[skip:end])*1, y + (yoff + v[skip:end])*1, color='black', lw=1)
-    plt.scatter(x, y, marker='<' if x > 0 else '>', color='black', s=10)
-plt.axis('equal')
-plt.axis('off')
-plt.tight_layout()
-tmpfile = io.BytesIO()
-plt.savefig(tmpfile, format='svg')
-svg = tmpfile.getvalue()
-arbor_playground.render_html(svg)
+df = pandas.DataFrame({"t/ms": t[t>150], "U/mV": vs[:,0][t>150]})
+fig = px.line(df, x='t/ms', y='U/mV')
+fig_html = fig.to_html(include_plotlyjs=False, full_html=False)
+arbor_playground.render_html(fig_html)
