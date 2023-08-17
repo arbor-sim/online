@@ -122,6 +122,7 @@ jobs:
         time em++ \
             ../python/*.cpp \
             -I ../ext/pybind11/include/ \
+            -I ../ext/json/include/ \
             -I "${ABS_XBUILDENV_INCLUDE}" \
             -I "${ABS_EM_ARBOR}/include" \
             -std=c++20 \
