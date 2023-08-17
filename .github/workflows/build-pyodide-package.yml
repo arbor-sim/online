@@ -72,7 +72,7 @@ jobs:
       run: |
         mkdir -p arbor_src/build_modcc_host
         cd arbor_src/build_modcc_host
-        cmake .. -DARB_USE_BUNDLED_LIBS=ON
+        cmake .. -DARB_USE_BUNDLED_LIBS=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
         make modcc -j 2
     - name: build-libarbor-emscripten
       # Here we instruct CMake/make to build the arbor static
