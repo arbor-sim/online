@@ -92,9 +92,8 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$(realpath prefix) \
             -DARB_USE_BUNDLED_LIBS=ON \
             -DARB_MODCC="${ABS_MODCC}" \
-            -DARB_ARCH=generic
+            -DARB_ARCH=generic \
             -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
-            -flto \
         make -j 2
         make install
     - name: build-arbor-python-so-emscripten
