@@ -144,6 +144,7 @@ jobs:
             '-DARB_CXX_COMPILER="/dev/null"' \
             '-DARB_DATA="/dev/null"' \
             '-DARB_PYTHON_LIB_PATH="/dev/null"' \
+            -flto \
             -g0 \
             -O2
     - name: build-dynamic-catalogues
