@@ -93,6 +93,8 @@ jobs:
             -DARB_USE_BUNDLED_LIBS=ON \
             -DARB_MODCC="${ABS_MODCC}" \
             -DARB_ARCH=generic
+            -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+            -flto \
         make -j 2
         make install
     - name: build-arbor-python-so-emscripten
@@ -144,7 +146,7 @@ jobs:
             '-DARB_CXX_COMPILER="/dev/null"' \
             '-DARB_DATA="/dev/null"' \
             '-DARB_PYTHON_LIB_PATH="/dev/null"' \
-            -flto=thin \
+            -flto \
             -g0 \
             -O2
     - name: build-dynamic-catalogues
