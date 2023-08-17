@@ -72,7 +72,7 @@ jobs:
       run: |
         mkdir -p arbor_src/build_modcc_host
         cd arbor_src/build_modcc_host
-        cmake .. -DARB_USE_BUNDLED_LIBS=ON -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+        cmake .. -DARB_USE_BUNDLED_LIBS=ON
         make modcc -j 2
     - name: build-libarbor-emscripten
       # Here we instruct CMake/make to build the arbor static
@@ -92,8 +92,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=$(realpath prefix) \
             -DARB_USE_BUNDLED_LIBS=ON \
             -DARB_MODCC="${ABS_MODCC}" \
-            -DARB_ARCH=generic \
-            -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON
+            -DARB_ARCH=generic
         make -j 2
         make install
     - name: build-arbor-python-so-emscripten
@@ -145,7 +144,7 @@ jobs:
             '-DARB_CXX_COMPILER="/dev/null"' \
             '-DARB_DATA="/dev/null"' \
             '-DARB_PYTHON_LIB_PATH="/dev/null"' \
-            -flto \
+            --disable-lto \
             -g0 \
             -O2
     - name: build-dynamic-catalogues
